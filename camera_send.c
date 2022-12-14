@@ -150,16 +150,27 @@ int main(int argc, char *argv[])
 		}
 
 		int fpsize;
+		int nbyte;
 		//파일을 읽고 buffer에 담는다.
 		while(nsize != fsize){
 			//read file and insert to buffer
 			fpsize = fread(buf, 1, 256, file);
 			nsize += fpsize;
-			if(send(serv_sock, buf, fpsize, 0)==-1){
+			if(fpsize != 256){
+				printf("%d\n", fpsize);
+			}
+			if((nbyte = send(serv_sock, buf, fpsize, 0))==-1){
 				error_handling("fail to send");
 			}
+			else{
+				printf("%d\n", nbyte);
+			}
 		}
+		printf("%d\n", nsize);
+		
 		nsize = 0;
+		fsize = 0;
+
 		//camera의 코드로 넘어가도 되는지 확인
 		int read_camera = 0;
 		while(read_camera != 1){
